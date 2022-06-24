@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/MovingAverages/static/css/main.f9156467.css",
+    "main.js": "/MovingAverages/static/js/main.7c3e8e18.js",
+    "index.html": "/MovingAverages/index.html",
+    "main.f9156467.css.map": "/MovingAverages/static/css/main.f9156467.css.map",
+    "main.7c3e8e18.js.map": "/MovingAverages/static/js/main.7c3e8e18.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f9156467.css",
+    "static/js/main.7c3e8e18.js"
+  ]
+}
