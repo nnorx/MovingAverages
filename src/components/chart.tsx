@@ -89,14 +89,12 @@ export default function Chart() {
         dataArr[i].price = Math.trunc(dataArr2[i][1]);
       }
       setPoints(dataArr);
-      setKey("test");
     }
   }, [sma, dataFng, dataPrice]);
 
   return (
     <div>
       <LineChart
-        key={key}
         data={points}
         margin={{ top: 12, right: -45, left: -24, bottom: 3 }}
         width={width}
