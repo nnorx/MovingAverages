@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import ResponsiveAppBar from "./components/appbar";
+import Chart from "./components/chart";
 
-function App() {
+export const smaContext = React.createContext({
+  sma: 99,
+  setSma: (sma: number) => {},
+});
+
+export default function App() {
+  const [sma, setSma] = useState(99);
+  const value = { sma, setSma };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      <smaContext.Provider value={value}>
+        <ResponsiveAppBar />
+        <div
+          id="container"
+          style={{ height: "100%", background: "#2B2D42", overflow: "hidden" }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Chart />
+        </div>
+      </smaContext.Provider>
+    </>
   );
 }
-
-export default App;
