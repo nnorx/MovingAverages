@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/MovingAverages/static/css/main.f9156467.css",
-    "main.js": "/MovingAverages/static/js/main.fcf9e8f9.js",
+    "main.js": "/MovingAverages/static/js/main.a8b6563f.js",
     "index.html": "/MovingAverages/index.html",
     "main.f9156467.css.map": "/MovingAverages/static/css/main.f9156467.css.map",
-    "main.fcf9e8f9.js.map": "/MovingAverages/static/js/main.fcf9e8f9.js.map"
+    "main.a8b6563f.js.map": "/MovingAverages/static/js/main.a8b6563f.js.map"
   },
   "entrypoints": [
     "static/css/main.f9156467.css",
-    "static/js/main.fcf9e8f9.js"
+    "static/js/main.a8b6563f.js"
   ]
 }
