@@ -84,9 +84,8 @@ export default function Chart() {
       }
 
       var dataArr2 = [...dataPrice];
-      console.log(dataArr2);
+
       for (let i = 0; i < dataArr.length - 2; i++) {
-        console.log(i);
         dataArr[i].price = Math.trunc(dataArr2[i][1]);
       }
       setPoints(dataArr);
