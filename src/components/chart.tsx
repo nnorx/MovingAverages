@@ -27,8 +27,6 @@ export default function Chart() {
   const [dataFng, setDataFng] = useState<dataPoint[]>([]);
   const [dataPrice, setDataPrice] = useState<any[]>([]);
 
-  const [key, setKey] = useState<any>(null);
-
   const { sma } = useContext(smaContext);
   const { height, width } = useWindowDimensions();
   const [points, setPoints] = useState<dataPoint[]>([]);
@@ -54,8 +52,9 @@ export default function Chart() {
   }
 
   async function fetchPrices() {
+    let timestamp = Math.floor(Date.now() / 1000).toString();
     let res = await axios.get(
-      `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=usd&from=1517443200&to=1656028800`
+      `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=usd&from=1517443200&to=${timestamp}`
     );
     setDataPrice(res.data.prices);
   }
@@ -85,9 +84,10 @@ export default function Chart() {
 
       var dataArr2 = [...dataPrice];
 
-      for (let i = 0; i < dataArr.length - 2; i++) {
+      for (let i = 0; i < dataArr.length - 1; i++) {
         dataArr[i].price = Math.trunc(dataArr2[i][1]);
       }
+
       setPoints(dataArr);
     }
   }, [sma, dataFng, dataPrice]);
