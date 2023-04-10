@@ -102,7 +102,7 @@ export default function Chart() {
       >
         <CartesianGrid strokeDasharray="5 10" strokeOpacity=".14" />
         <Line
-          name="price"
+          name="price (log scale)"
           dataKey="price"
           yAxisId="right"
           type="monotone"
@@ -151,6 +151,8 @@ export default function Chart() {
         />
         <YAxis
           dataKey="price"
+          scale="log"
+          domain={['auto', 'auto']}
           axisLine={false}
           yAxisId="right"
           orientation="right"
