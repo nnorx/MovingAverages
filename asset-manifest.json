@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/MovingAverages/static/css/main.f9156467.css",
-    "main.js": "/MovingAverages/static/js/main.7959e05e.js",
+    "main.css": "/MovingAverages/static/css/main.b2cea38c.css",
+    "main.js": "/MovingAverages/static/js/main.7be922c3.js",
     "index.html": "/MovingAverages/index.html",
-    "main.f9156467.css.map": "/MovingAverages/static/css/main.f9156467.css.map",
-    "main.7959e05e.js.map": "/MovingAverages/static/js/main.7959e05e.js.map"
+    "main.b2cea38c.css.map": "/MovingAverages/static/css/main.b2cea38c.css.map",
+    "main.7be922c3.js.map": "/MovingAverages/static/js/main.7be922c3.js.map"
   },
   "entrypoints": [
-    "static/css/main.f9156467.css",
-    "static/js/main.7959e05e.js"
+    "static/css/main.b2cea38c.css",
+    "static/js/main.7be922c3.js"
   ]
 }
