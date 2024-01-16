@@ -1,4 +1,3 @@
-import React from "react";
 import nn from "./../assets/nn.ico";
 import styled from "styled-components";
 
