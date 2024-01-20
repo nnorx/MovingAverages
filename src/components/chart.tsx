@@ -1,6 +1,5 @@
-import { useState, useEffect, useMemo, useCallback, useContext } from "react";
 import axios from "axios";
-
+import { useState, useEffect, useMemo, useCallback, useContext } from "react";
 import {
   LineChart,
   Line,
@@ -12,24 +11,11 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import moment from "moment";
+
 import { smaContext } from "../App";
-
-type dataPoint = {
-  value: string;
-  ma_value?: number;
-  value_classification?: string;
-  timestamp: string;
-  time_until_update?: string;
-  price?: number;
-};
-
-type pricePoint = [timestamp: number, price: number];
-
-type chartPoint = {
-  timestamp: string;
-  price: number;
-  ma_value: number;
-};
+import CustomDot from "./customDot";
+import { FngPoint, PricePoint } from "../types/apiResonse";
+import { ChartPoint, JoinedPoint } from "../types/chart";
 
 const CACHE_EXPIRATION = 15 * 60 * 1000;
 
@@ -44,9 +30,10 @@ function getLastFifteenMinuteInterval() {
 }
 
 export default function Chart() {
-  const [dataFng, setDataFng] = useState<dataPoint[]>([]);
-  const [dataPrice, setDataPrice] = useState<pricePoint[]>([]);
-  const [points, setPoints] = useState<chartPoint[]>([]);
+  const [dataFng, setDataFng] = useState<FngPoint[]>([]);
+  const [dataPrice, setDataPrice] = useState<PricePoint[]>([]);
+  const [joinedData, setJoinedData] = useState<JoinedPoint[]>([]);
+  const [chartData, setChartData] = useState<ChartPoint[]>([]);
   const { sma } = useContext(smaContext);
 
   const formatXAxis = useMemo(
@@ -123,39 +110,67 @@ export default function Chart() {
 
   useEffect(() => {
     if (dataFng && dataFng.length > 0 && dataPrice && dataPrice.length > 0) {
-      const chartArr: chartPoint[] = [];
+      const map1 = new Map(
+        dataFng.map((item) => [
+          moment(item.timestamp).utc().startOf("day").unix() * 1000,
+          item,
+        ])
+      );
+      const map2 = new Map(dataPrice.map((item) => [item[0], item]));
 
-      dataFng.forEach((point, idx) => {
+      const keys = new Set([...map1.keys(), ...map2.keys()]);
+
+      const joinedData: JoinedPoint[] = Array.from(keys, (key) => {
+        if (map1.has(key) && map2.has(key)) {
+          return {
+            timestamp: key,
+            fng: map1.get(key)?.value,
+            price: map2.get(key)?.[1],
+          };
+        }
+      }).filter(Boolean) as JoinedPoint[];
+
+      setJoinedData(joinedData);
+    }
+  }, [dataFng, dataPrice]);
+
+  useEffect(() => {
+    if (joinedData && joinedData.length > 0) {
+      const chartArr: ChartPoint[] = [];
+
+      joinedData.forEach((point, idx) => {
         if (idx < sma) {
           chartArr.push({
-            timestamp: point.timestamp,
-            price: +dataPrice[idx][1].toFixed(0),
+            timestamp: moment(point.timestamp)
+              .add(1, "day")
+              .format("MM-DD-YYYY"),
+            price: +point.price.toFixed(0),
             ma_value: 0,
           });
           return;
         }
 
         const movingAverage = +(
-          dataFng.slice(idx - sma, idx).reduce((acc, cur) => {
-            return acc + parseInt(cur.value);
+          joinedData.slice(idx - sma, idx).reduce((acc, cur) => {
+            return acc + parseInt(cur.fng);
           }, 0) / sma
         ).toFixed(2);
 
         chartArr.push({
-          timestamp: point.timestamp,
-          price: +dataPrice[idx][1].toFixed(0),
+          timestamp: moment(point.timestamp).add(1, "day").format("MM-DD-YYYY"),
+          price: +point.price.toFixed(0),
           ma_value: movingAverage,
         });
       });
 
-      setPoints(chartArr);
+      setChartData(chartArr);
     }
-  }, [sma, dataFng, dataPrice]);
+  }, [joinedData, sma]);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart
-        data={points}
+        data={chartData}
         margin={{ top: 8, right: -42, left: -24, bottom: 8 }}
       >
         <CartesianGrid strokeDasharray="15 15" strokeOpacity=".15" />
@@ -165,7 +180,7 @@ export default function Chart() {
           yAxisId="right"
           type="monotone"
           stroke="#8884d8"
-          strokeWidth="2"
+          strokeWidth="1"
           dot={false}
           activeDot={{
             fill: "transparent",
@@ -179,9 +194,9 @@ export default function Chart() {
           dataKey="ma_value"
           yAxisId="left"
           type="monotone"
-          stroke="#BBE5ED"
-          strokeWidth="2"
-          dot={false}
+          stroke="#d9d9d9"
+          strokeWidth="1"
+          dot={<CustomDot cx={0} cy={0} value={0} />}
           activeDot={{
             fill: "transparent",
             stroke: "yellow",

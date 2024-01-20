@@ -1,32 +1,85 @@
-import styled from "styled-components";
-import Chart from "./components/chart";
-import Appbar from "./components/appbar";
 import React from "react";
-import Footer from "./components/Footer";
+import styled from "styled-components";
 
-const ChartArea = styled.div`
+import Appbar from "./components/appbar";
+import Chart from "./components/chart";
+import Footer from "./components/Footer";
+import Prints from "./components/prints";
+import { SmaContext, ViewContext } from "./types/context";
+
+const MainArea = styled.div`
   flex: 1;
   width: 100%;
   display: flex;
   flex-direction: column;
+  transition: all 0.5s ease;
+  position: relative;
+  overflow: hidden;
+  align-items: flex-start;
 `;
 
-export const smaContext = React.createContext<{
-  sma: number;
-  setSma: React.Dispatch<React.SetStateAction<number>>;
-}>({ sma: 90, setSma: () => {} });
+const ChartArea = styled.div<{ $rotate: boolean }>`
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.25s ease-out;
+  user-select: none;
+
+  ${({ $rotate }) => $rotate && "transform: translateX(-100%);"}
+`;
+
+const StatArea = styled.div<{ $rotate: boolean }>`
+  transition: all 0.25s ease-out;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  transform: translateX(100%);
+  transform-origin: right;
+  padding: 16px 24px;
+  gap: 8px;
+  overflow-y: auto;
+
+  ${({ $rotate }) => $rotate && "transform: translateX(0);"}
+`;
+
+export const smaContext = React.createContext<SmaContext>({
+  sma: 90,
+  setSma: () => {},
+});
+
+export const viewContext = React.createContext<ViewContext>({
+  detailView: true,
+  setDetailView: () => {},
+});
 
 export default function App() {
   const [sma, setSma] = React.useState(90);
-  const value = { sma, setSma };
+  const smaCtx = { sma, setSma };
+
+  const [detailView, setDetailView] = React.useState(false);
+  const viewCtx = { detailView, setDetailView };
 
   return (
-    <smaContext.Provider value={value}>
-      <Appbar />
-      <ChartArea>
-        <Chart />
-      </ChartArea>
-      <Footer />
+    <smaContext.Provider value={smaCtx}>
+      <viewContext.Provider value={viewCtx}>
+        <Appbar />
+        <MainArea>
+          <ChartArea $rotate={detailView}>
+            <Chart />
+          </ChartArea>
+
+          <StatArea $rotate={detailView}>
+            <Prints />
+          </StatArea>
+        </MainArea>
+        <Footer />
+      </viewContext.Provider>
     </smaContext.Provider>
   );
 }
