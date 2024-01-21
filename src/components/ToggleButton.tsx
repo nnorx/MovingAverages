@@ -4,6 +4,7 @@ import { smaContext } from "../App";
 
 const Button = styled.button<{ $active: boolean }>`
   height: 100%;
+  min-width: 48px;
   display: inline-flex;
   justify-content: center;
   align-items: center;

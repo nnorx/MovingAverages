@@ -24,6 +24,7 @@ body {
 :root {
   --primary: rgb(43, 45, 66);
   --secondary: #fff;
+  --highlight: #8884d8;
 }
 
 div {

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { viewContext } from "../App";
 import nn from "./../assets/nn.ico";
 import swap from "./../assets/swap.svg";
@@ -14,7 +14,7 @@ const Container = styled.div`
   padding: 0 8px;
 `;
 
-const NLink = styled.a`
+const NLink = styled.a<{ $active?: boolean }>`
   height: 100%;
   width: 56px;
   display: flex;
@@ -23,26 +23,41 @@ const NLink = styled.a`
   background-color: rgba(256, 256, 256, 0.25);
   transition: all 0.25s ease-out;
   img {
-    transition: all 0.15s ease-out;
-  }
-  :hover {
-    transform: scale(1.1);
-  }
-  :active {
-    transform: rotate(180deg);
+    transition: all 0.25s ease-out;
+    @keyframes spin {
+      0% {
+        transform: rotateY(0deg);
+      }
+      50% {
+        transform: rotateY(180deg) scale(0.9);
+      }
+      100% {
+        transform: rotateY(0deg);
+      }
+    }
+    ${({ $active }) => $active && "animation: spin 0.25s ease-out alternate;"}
   }
 `;
 
 export default function Footer() {
   const { detailView, setDetailView } = useContext(viewContext);
+  const [animate, setAnimate] = useState<boolean>(false);
 
   return (
     <Container>
-      <NLink onClick={() => setDetailView(!detailView)}>
+      <NLink
+        $active={animate}
+        onClick={() => {
+          setAnimate(true);
+          setDetailView(!detailView);
+          setTimeout(() => setAnimate(false), 500);
+        }}
+      >
         <img
           src={swap}
           height="24px"
           width="24px"
+          alt="swap view"
           style={{
             color: "#fff",
             backgroundColor: "black",
@@ -57,7 +72,7 @@ export default function Footer() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <img src={nn} height="24px" width="24px"></img>
+        <img src={nn} height="24px" width="24px" alt="nicknorcross.com"></img>
       </NLink>
     </Container>
   );
