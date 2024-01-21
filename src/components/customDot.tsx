@@ -1,18 +1,22 @@
+import { ChartPoint } from "../types/chart";
 import { getColor } from "../utils/colors";
 
 type Props = {
   cx: number;
   cy: number;
   value: number;
+  payload: ChartPoint;
 };
 
-export default function CustomDot({ cx, cy, value }: Props) {
+export default function CustomDot({ cx, cy, value, payload }: Props) {
+  if (value === 0) return null;
+  if (payload.visibleDot == false) return null;
   return (
     <svg
-      x={cx - 1.5}
-      y={cy - 1.5}
-      width={3}
-      height={3}
+      x={cx - 2}
+      y={cy - 2}
+      width={4}
+      height={4}
       fill={getColor(value)}
       viewBox="0 0 1024 1024"
     >

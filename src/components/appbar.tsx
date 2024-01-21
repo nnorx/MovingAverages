@@ -1,6 +1,6 @@
+import dayjs from "dayjs";
 import styled from "styled-components";
 import ToggleButton from "./ToggleButton";
-import moment from "moment";
 import { viewContext } from "../App";
 import { useContext } from "react";
 
@@ -83,7 +83,7 @@ export default function Appbar() {
         </ToggleButtonGroup>
 
         <Prints $rotate={detailView}>
-          Prints {moment().format("MM/DD/YYYY")}
+          Prints {dayjs().format("MM/DD/YYYY")}
         </Prints>
       </Interchangable>
     </Container>

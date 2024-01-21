@@ -10,12 +10,16 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
-import moment from "moment";
+
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 
 import { smaContext } from "../App";
 import CustomDot from "./customDot";
 import { FngPoint, PricePoint } from "../types/apiResonse";
 import { ChartPoint, JoinedPoint } from "../types/chart";
+
+dayjs.extend(utc);
 
 const CACHE_EXPIRATION = 15 * 60 * 1000;
 
@@ -38,7 +42,7 @@ export default function Chart() {
 
   const formatXAxis = useMemo(
     () => (tick: string) => {
-      const date = moment(tick, "MM-DD-YYYY");
+      const date = dayjs(tick, "MM-DD-YYYY");
       return date.format("MMM/DD/YY");
     },
     []
@@ -112,7 +116,7 @@ export default function Chart() {
     if (dataFng && dataFng.length > 0 && dataPrice && dataPrice.length > 0) {
       const map1 = new Map(
         dataFng.map((item) => [
-          moment(item.timestamp).utc().startOf("day").unix() * 1000,
+          dayjs(item.timestamp).utc().startOf("day").unix() * 1000,
           item,
         ])
       );
@@ -141,11 +145,12 @@ export default function Chart() {
       joinedData.forEach((point, idx) => {
         if (idx < sma) {
           chartArr.push({
-            timestamp: moment(point.timestamp)
+            timestamp: dayjs(point.timestamp)
               .add(1, "day")
               .format("MM-DD-YYYY"),
             price: +point.price.toFixed(0),
             ma_value: 0,
+            visibleDot: false,
           });
           return;
         }
@@ -157,9 +162,10 @@ export default function Chart() {
         ).toFixed(2);
 
         chartArr.push({
-          timestamp: moment(point.timestamp).add(1, "day").format("MM-DD-YYYY"),
+          timestamp: dayjs(point.timestamp).add(1, "day").format("MM-DD-YYYY"),
           price: +point.price.toFixed(0),
           ma_value: movingAverage,
+          visibleDot: idx % 5 === 0,
         });
       });
 
@@ -184,7 +190,7 @@ export default function Chart() {
           dot={false}
           activeDot={{
             fill: "transparent",
-            stroke: "yellow",
+            stroke: "#36cfc9",
             strokeWidth: 2,
             r: 5,
           }}
@@ -196,10 +202,22 @@ export default function Chart() {
           type="monotone"
           stroke="#d9d9d9"
           strokeWidth="1"
-          dot={<CustomDot cx={0} cy={0} value={0} />}
+          dot={
+            <CustomDot
+              cx={0}
+              cy={0}
+              value={0}
+              payload={{
+                timestamp: "",
+                price: 0,
+                ma_value: 0,
+                visibleDot: false,
+              }}
+            />
+          }
           activeDot={{
             fill: "transparent",
-            stroke: "yellow",
+            stroke: "#36cfc9",
             strokeWidth: 2,
             r: 5,
           }}
