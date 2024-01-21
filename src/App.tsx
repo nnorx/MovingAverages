@@ -5,7 +5,7 @@ import Appbar from "./components/appbar";
 import Chart from "./components/chart";
 import Footer from "./components/Footer";
 import Prints from "./components/prints";
-import { SmaContext, ViewContext } from "./types/context";
+import { ChartSettingsContext, SmaContext, ViewContext } from "./types/context";
 
 const MainArea = styled.div`
   flex: 1;
@@ -58,6 +58,13 @@ export const viewContext = React.createContext<ViewContext>({
   setDetailView: () => {},
 });
 
+export const chartSettingsContext = React.createContext<ChartSettingsContext>({
+  chartSettings: {
+    scaleToFit: false,
+  },
+  setChartSettings: () => {},
+});
+
 export default function App() {
   const [sma, setSma] = React.useState(90);
   const smaCtx = { sma, setSma };
@@ -65,20 +72,27 @@ export default function App() {
   const [detailView, setDetailView] = React.useState(false);
   const viewCtx = { detailView, setDetailView };
 
+  const [chartSettings, setChartSettings] = React.useState({
+    scaleToFit: true,
+  });
+  const chartSettingsCtx = { chartSettings, setChartSettings };
+
   return (
     <smaContext.Provider value={smaCtx}>
       <viewContext.Provider value={viewCtx}>
-        <Appbar />
-        <MainArea>
-          <ChartArea $rotate={detailView}>
-            <Chart />
-          </ChartArea>
+        <chartSettingsContext.Provider value={chartSettingsCtx}>
+          <Appbar />
+          <MainArea>
+            <ChartArea $rotate={detailView}>
+              <Chart />
+            </ChartArea>
 
-          <StatArea $rotate={detailView}>
-            <Prints />
-          </StatArea>
-        </MainArea>
-        <Footer />
+            <StatArea $rotate={detailView}>
+              <Prints />
+            </StatArea>
+          </MainArea>
+          <Footer />
+        </chartSettingsContext.Provider>
       </viewContext.Provider>
     </smaContext.Provider>
   );

@@ -14,7 +14,7 @@ import {
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
-import { smaContext } from "../App";
+import { chartSettingsContext, smaContext } from "../App";
 import CustomDot from "./customDot";
 import { FngPoint, PricePoint } from "../types/apiResonse";
 import { ChartPoint, JoinedPoint } from "../types/chart";
@@ -39,12 +39,18 @@ export default function Chart() {
   const [joinedData, setJoinedData] = useState<JoinedPoint[]>([]);
   const [chartData, setChartData] = useState<ChartPoint[]>([]);
   const { sma } = useContext(smaContext);
+  const { chartSettings } = useContext(chartSettingsContext);
 
   const formatXAxis = useMemo(
     () => (tick: string) => {
       const date = dayjs(tick, "MM-DD-YYYY");
       return date.format("MMM/DD/YY");
     },
+    []
+  );
+
+  const formatYAxis = useMemo(
+    () => (tick: string) => Math.floor(Number(tick)).toString(),
     []
   );
 
@@ -169,9 +175,16 @@ export default function Chart() {
         });
       });
 
+      if (chartSettings.scaleToFit) {
+        const start = chartArr[sma].ma_value;
+        for (let i = 0; i < sma; i++) {
+          chartArr[i].ma_value = start;
+        }
+      }
+
       setChartData(chartArr);
     }
-  }, [joinedData, sma]);
+  }, [joinedData, sma, chartSettings.scaleToFit]);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -236,8 +249,20 @@ export default function Chart() {
         <YAxis
           dataKey="ma_value"
           yAxisId="left"
-          domain={[0, 100]}
+          domain={
+            chartSettings.scaleToFit
+              ? [
+                  Math.min(
+                    ...chartData
+                      .filter((x) => x.ma_value !== 0)
+                      .map((obj) => obj.ma_value)
+                  ),
+                  Math.floor(Math.max(...chartData.map((obj) => obj.ma_value))),
+                ]
+              : [0, 100]
+          }
           tickCount={11}
+          tickFormatter={chartSettings.scaleToFit ? formatYAxis : undefined}
           stroke={"#EDF2F4"}
         />
         <YAxis
@@ -252,10 +277,11 @@ export default function Chart() {
         />
         <Tooltip
           contentStyle={{
-            backgroundColor: "rgba(136, 132, 216, 0.3)",
-            color: "#fff",
+            backgroundColor: "rgba(136, 132, 216, 0.25)",
+            border: "1px solid rgba(204, 204, 204, 0.25)",
+            color: "rgba(237, 242, 244, 0.75)",
           }}
-          position={{ x: 60, y: 60 }}
+          position={{ x: 55, y: 55 }}
           itemStyle={{ color: "#EDF2F4" }}
           cursor={false}
         />

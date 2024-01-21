@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ToggleButton from "./ToggleButton";
 import { viewContext } from "../App";
 import { useContext } from "react";
+import icon from "./../assets/android-chrome-192x192.png";
 
 const Container = styled.div`
   height: 64px;
@@ -10,12 +11,11 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 16px;
+  padding: 0 8px;
 `;
 
 const Interchangable = styled.div`
   height: 100%;
-  min-width: 55%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -57,6 +57,18 @@ const Prints = styled.div<{ $rotate: boolean }>`
   ${({ $rotate }) => $rotate && "transform: translateY(0); user-select: none; "}
 `;
 
+const Title = styled.div`
+  &:before {
+    content: "Fear & Greed Moving Averages";
+    text-wrap: balance;
+    padding-right: 8px;
+
+    @media (max-width: 600px) {
+      content: "Moving Averages";
+    }
+  }
+`;
+
 const VALUES = [7, 14, 30, 90, 180, 365];
 
 export default function Appbar() {
@@ -64,17 +76,18 @@ export default function Appbar() {
 
   return (
     <Container>
-      <span
+      <div
         style={{
-          flex: "1 0 auto",
-          textWrap: "balance",
-          minWidth: "150px",
-          maxWidth: "45%",
-          paddingRight: "8px",
+          display: "flex",
+          height: "100%",
+          alignItems: "center",
+          gap: "8px",
         }}
       >
-        Fear and Greed Moving Averages
-      </span>
+        <img src={icon} height="42px" width="42px" />
+        <Title />
+      </div>
+
       <Interchangable>
         <ToggleButtonGroup $rotate={detailView}>
           {VALUES.map((value) => (

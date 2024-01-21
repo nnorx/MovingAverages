@@ -1,17 +1,37 @@
 import { useContext, useState } from "react";
-import { viewContext } from "../App";
-import nn from "./../assets/nn.ico";
-import swap from "./../assets/swap.svg";
-
 import styled from "styled-components";
 
+import { chartSettingsContext, viewContext } from "../App";
+import nn from "./../assets/nn.ico";
+import swap from "./../assets/swap.svg";
+import Switch from "./switch";
+
 const Container = styled.div`
-  height: 42px;
+  height: 48px;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 8px;
+  padding: 0 16px;
+`;
+
+const Controls = styled.div`
+  height: 100%;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  position: relative;
+`;
+
+const Retractable = styled.div<{ $retracted: boolean }>`
+  position: relative;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.25s ease-out;
+
+  ${({ $retracted }) => $retracted && "transform: translateY(100%);"}
 `;
 
 const NLink = styled.a<{ $active?: boolean }>`
@@ -43,29 +63,43 @@ export default function Footer() {
   const { detailView, setDetailView } = useContext(viewContext);
   const [animate, setAnimate] = useState<boolean>(false);
 
+  const { chartSettings, setChartSettings } = useContext(chartSettingsContext);
+
   return (
     <Container>
-      <NLink
-        $active={animate}
-        onClick={() => {
-          setAnimate(true);
-          setDetailView(!detailView);
-          setTimeout(() => setAnimate(false), 500);
-        }}
-      >
-        <img
-          src={swap}
-          height="24px"
-          width="24px"
-          alt="swap view"
-          style={{
-            color: "#fff",
-            backgroundColor: "black",
-            borderRadius: "50%",
-            padding: 4,
+      <Controls>
+        <NLink
+          $active={animate}
+          onClick={() => {
+            setAnimate(true);
+            setDetailView(!detailView);
+            setTimeout(() => setAnimate(false), 500);
           }}
-        ></img>
-      </NLink>
+        >
+          <img
+            src={swap}
+            height="24px"
+            width="24px"
+            alt="swap view"
+            style={{
+              color: "#fff",
+              backgroundColor: "black",
+              borderRadius: "50%",
+              padding: 4,
+            }}
+          ></img>
+        </NLink>
+
+        <Retractable $retracted={detailView}>
+          <Switch
+            label="Scale to fit"
+            checked={chartSettings.scaleToFit}
+            onChange={() =>
+              setChartSettings({ scaleToFit: !chartSettings.scaleToFit })
+            }
+          />
+        </Retractable>
+      </Controls>
 
       <NLink
         href="https://nicknorcross.com"

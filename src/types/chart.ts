@@ -10,3 +10,7 @@ export type JoinedPoint = {
   fng: string;
   price: number;
 };
+
+export type ChartSettings = {
+  scaleToFit: boolean;
+};
