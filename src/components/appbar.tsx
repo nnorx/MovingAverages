@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import styled from "styled-components";
 import ToggleButton from "./ToggleButton";
 import { viewContext } from "../App";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import icon from "./../assets/android-chrome-192x192.png";
 
 const Container = styled.div`
@@ -29,7 +29,6 @@ const ToggleButtonGroup = styled.div<{ $rotate: boolean }>`
   justify-content: space-between;
   align-items: center;
   border: 1px solid #d3d3d3;
-  height: 35px;
   border-radius: 4px;
   overflow: auto;
 
@@ -74,6 +73,10 @@ const VALUES = [7, 14, 30, 90, 180, 365];
 export default function Appbar() {
   const { detailView } = useContext(viewContext);
 
+  const ToggleButtons = useMemo(() => {
+    return VALUES.map((value) => <ToggleButton key={value} value={value} />);
+  }, []);
+
   return (
     <Container>
       <div
@@ -90,9 +93,7 @@ export default function Appbar() {
 
       <Interchangable>
         <ToggleButtonGroup $rotate={detailView}>
-          {VALUES.map((value) => (
-            <ToggleButton key={value} value={value} />
-          ))}
+          {ToggleButtons}
         </ToggleButtonGroup>
 
         <Prints $rotate={detailView}>

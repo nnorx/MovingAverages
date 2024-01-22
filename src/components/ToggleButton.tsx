@@ -8,24 +8,28 @@ const Button = styled.button<{ $active: boolean }>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  font-family: "Roboto", sans-serif;
+  font-family: Roboto, sans-serif;
   font-size: 0.875rem;
   padding: 11px;
   letter-spacing: 0.02857em;
   user-select: none;
-  background-color: transparent;
+  background-color: #8884d840;
   color: var(--secondary);
   border-style: none;
   line-height: 1.75;
-  transition: background-color 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
   ${({ $active }) => $active && "background-color: rgb(90, 125, 124);"}
+
+  &:hover {
+    background-color: rgb(90, 125, 124);
+  }
 `;
 
 type Props = {
   value: number;
 };
 
-export default function ToggleButton({ value }: Props) {
+const ToggleButton = React.memo(function ToggleButton({ value }: Props) {
   const { sma, setSma } = React.useContext(smaContext);
 
   return (
@@ -36,4 +40,6 @@ export default function ToggleButton({ value }: Props) {
       {value}
     </Button>
   );
-}
+});
+
+export default ToggleButton;

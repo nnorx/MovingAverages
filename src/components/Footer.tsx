@@ -48,11 +48,11 @@ const NLink = styled.a<{ $active?: boolean }>`
       0% {
         transform: rotateY(0deg);
       }
-      50% {
-        transform: rotateY(180deg) scale(0.9);
+      25% {
+        transform: rotateY(180deg);
       }
       100% {
-        transform: rotateY(0deg);
+        transform: rotateY(360deg);
       }
     }
     ${({ $active }) => $active && "animation: spin 0.25s ease-out alternate;"}
@@ -78,8 +78,8 @@ export default function Footer() {
         >
           <img
             src={swap}
-            height="24px"
-            width="24px"
+            height="28px"
+            width="28px"
             alt="swap view"
             style={{
               color: "#fff",
@@ -106,7 +106,7 @@ export default function Footer() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <img src={nn} height="24px" width="24px" alt="nicknorcross.com"></img>
+        <img src={nn} height="26px" width="26px" alt="nicknorcross.com"></img>
       </NLink>
     </Container>
   );
