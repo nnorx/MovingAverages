@@ -11,7 +11,7 @@ type Props = {
 export default function CustomDot({ cx, cy, value, payload }: Props) {
   if (value === 0) return null;
   if (payload.visibleDot == false) return null;
-  const size = 20;
+  const size = 10;
 
   return (
     <svg

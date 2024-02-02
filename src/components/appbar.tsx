@@ -36,7 +36,7 @@ const ToggleButtonGroup = styled.div<{ $rotate: boolean }>`
     border-left: 1px solid #d3d3d3;
   }
 
-  transition: all 0.25s ease-out;
+  transition: all var(--spring-duration) var(--spring-easing);
 
   ${({ $rotate }) =>
     $rotate && "transform: translateY(-200%); user-select: none;"}
@@ -50,7 +50,7 @@ const Prints = styled.div<{ $rotate: boolean }>`
   justify-content: space-evenly;
   align-items: flex-end;
   padding: 0 8px;
-  transition: all 0.25s ease-out;
+  transition: all var(--spring-duration) var(--spring-easing);
   transform: translateY(200%);
 
   ${({ $rotate }) => $rotate && "transform: translateY(0); user-select: none; "}

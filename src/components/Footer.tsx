@@ -29,7 +29,7 @@ const Retractable = styled.div<{ $retracted: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: all 0.25s ease-out;
+  transition: all var(--spring-duration) var(--spring-easing);
 
   ${({ $retracted }) => $retracted && "transform: translateY(100%);"}
 `;
@@ -41,9 +41,9 @@ const NLink = styled.a<{ $active?: boolean }>`
   justify-content: center;
   align-items: center;
   background-color: rgba(256, 256, 256, 0.25);
-  transition: all 0.25s ease-out;
+  transition: all var(--spring-duration) var(--spring-easing);
   img {
-    transition: all 0.25s ease-out;
+    transition: all 0.25s var(--spring-easing);
     @keyframes spin {
       0% {
         transform: rotateY(0deg);

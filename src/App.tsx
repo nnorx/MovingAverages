@@ -12,10 +12,9 @@ const MainArea = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  transition: all 0.5s ease;
+  align-items: flex-start;
   position: relative;
   overflow: hidden;
-  align-items: flex-start;
 `;
 
 const ChartArea = styled.div<{ $rotate: boolean }>`
@@ -24,14 +23,14 @@ const ChartArea = styled.div<{ $rotate: boolean }>`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: all 0.25s ease-out;
+  transition: all var(--spring-duration) var(--spring-easing);
   user-select: none;
 
   ${({ $rotate }) => $rotate && "transform: translateX(-100%);"}
 `;
 
 const StatArea = styled.div<{ $rotate: boolean }>`
-  transition: all 0.25s ease-out;
+  transition: all var(--spring-duration) var(--spring-easing);
   position: absolute;
   inset: 0;
   width: 100%;

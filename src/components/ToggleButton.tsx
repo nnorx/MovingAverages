@@ -17,11 +17,23 @@ const Button = styled.button<{ $active: boolean }>`
   color: var(--secondary);
   border-style: none;
   line-height: 1.75;
-  transition: all 0.25s ease-in-out;
+  transition: all 0.15s ease-out;
   ${({ $active }) => $active && "background-color: rgb(90, 125, 124);"}
 
   &:hover {
-    background-color: rgb(90, 125, 124);
+    background-color: #8884d8;
+    ${({ $active }) =>
+      $active
+        ? "background-color: rgba(90, 125, 124, 0.8);"
+        : "background-color: rgba(43, 45, 66, 0.8);"}
+  }
+
+  &:active {
+    background-color: #8884d840;
+    ${({ $active }) =>
+      $active
+        ? "background-color: rgba(90, 125, 124, 0.6);"
+        : "background-color: rgba(43, 45, 66, 0.6);"}
   }
 `;
 

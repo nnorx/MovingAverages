@@ -171,7 +171,7 @@ export default function Chart() {
           timestamp: dayjs(point.timestamp).add(1, "day").format("MM-DD-YYYY"),
           price: +point.price.toFixed(0),
           ma_value: movingAverage,
-          visibleDot: idx % 5 === 0,
+          visibleDot: true,
         });
       });
 
@@ -207,6 +207,7 @@ export default function Chart() {
             strokeWidth: 2,
             r: 5,
           }}
+          animationDuration={50}
         />
         <Line
           name="moving average"
@@ -215,6 +216,7 @@ export default function Chart() {
           type="monotone"
           stroke="#d9d9d9"
           strokeWidth="1"
+          animationDuration={50}
           dot={
             <CustomDot
               cx={0}
