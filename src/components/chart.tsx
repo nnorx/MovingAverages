@@ -1,5 +1,4 @@
-import axios from "axios";
-import { useState, useEffect, useMemo, useCallback, useContext } from "react";
+import { useState, useEffect, useMemo, useContext } from "react";
 import {
   LineChart,
   Line,
@@ -14,28 +13,19 @@ import {
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
-import { chartSettingsContext, smaContext } from "../App";
 import CustomDot from "./customDot";
-import { FngPoint, PricePoint } from "../types/apiResonse";
 import { ChartPoint, JoinedPoint } from "../types/chart";
+import { useQuery } from "@tanstack/react-query";
+import getFng from "../api/getFnG";
+import getPrice from "../api/getPrice";
+import { chartSettingsContext, smaContext } from "../utils/context";
 
 dayjs.extend(utc);
 
-const CACHE_EXPIRATION = 15 * 60 * 1000;
-
-function getLastFifteenMinuteInterval() {
-  const date = new Date();
-  const minutes = date.getMinutes();
-  const remainder = minutes % 15;
-  date.setMinutes(minutes - remainder);
-  date.setSeconds(0);
-  date.setMilliseconds(0);
-  return date.getTime();
-}
-
 export default function Chart() {
-  const [dataFng, setDataFng] = useState<FngPoint[]>([]);
-  const [dataPrice, setDataPrice] = useState<PricePoint[]>([]);
+  const { data: dataFng } = useQuery(getFng);
+  const { data: dataPrice } = useQuery(getPrice);
+
   const [joinedData, setJoinedData] = useState<JoinedPoint[]>([]);
   const [chartData, setChartData] = useState<ChartPoint[]>([]);
   const { sma } = useContext(smaContext);
@@ -53,70 +43,6 @@ export default function Chart() {
     () => (tick: string) => Math.floor(Number(tick)).toString(),
     []
   );
-
-  const fetchFNG = useCallback(async () => {
-    const requestURL = `https://api.alternative.me/fng/?limit=0&date_format=us`;
-    const match = await caches.match(requestURL);
-    if ("caches" in window) {
-      if (match) {
-        const res = await match.json();
-
-        // Check if cache has expired
-        const now = Date.now();
-        if (now - res.timestamp < CACHE_EXPIRATION) {
-          setDataFng(res.data.reverse());
-          return;
-        }
-      }
-    }
-
-    const res = await axios.get(requestURL);
-
-    const dataToCache = {
-      timestamp: Date.now(),
-      data: res.data.data,
-    };
-
-    const cache = await caches.open("fng");
-    cache.put(requestURL, new Response(JSON.stringify(dataToCache)));
-
-    setDataFng(res.data.data.reverse());
-  }, []);
-
-  const fetchPrices = useCallback(async () => {
-    const ts = getLastFifteenMinuteInterval();
-    const requestURL = `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=usd&from=1517443200&to=${ts}`;
-
-    if ("caches" in window) {
-      const match = await caches.match(requestURL);
-      if (match) {
-        const res = await match.json();
-
-        const now = Date.now();
-        if (now - res.timestamp < CACHE_EXPIRATION) {
-          setDataPrice(res.prices);
-          return;
-        }
-      }
-    }
-
-    const res = await axios.get(requestURL);
-
-    const dataToCache = {
-      timestamp: Date.now(),
-      prices: res.data.prices,
-    };
-
-    const cache = await caches.open("fng");
-    cache.put(requestURL, new Response(JSON.stringify(dataToCache)));
-
-    setDataPrice(res.data.prices);
-  }, []);
-
-  useEffect(() => {
-    fetchFNG();
-    fetchPrices();
-  }, [fetchFNG, fetchPrices]);
 
   useEffect(() => {
     if (dataFng && dataFng.length > 0 && dataPrice && dataPrice.length > 0) {
@@ -207,7 +133,7 @@ export default function Chart() {
             strokeWidth: 2,
             r: 5,
           }}
-          animationDuration={50}
+          animationDuration={100}
         />
         <Line
           name="moving average"
@@ -216,7 +142,7 @@ export default function Chart() {
           type="monotone"
           stroke="#d9d9d9"
           strokeWidth="1"
-          animationDuration={50}
+          animationDuration={100}
           dot={
             <CustomDot
               cx={0}

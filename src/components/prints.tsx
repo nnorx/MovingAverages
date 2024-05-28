@@ -1,45 +1,13 @@
-import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
-import { FngPoint } from "../types/apiResonse";
 import Print from "./print";
-
-const CACHE_EXPIRATION = 15 * 60 * 1000;
+import { useQuery } from "@tanstack/react-query";
+import getFng from "../api/getFnG";
 
 export default function Prints() {
-  const [dataFng, setDataFng] = useState<FngPoint[]>([]);
+  const { data: dataFng, status } = useQuery(getFng);
 
-  const fetchFNG = useCallback(async () => {
-    const requestURL = `https://api.alternative.me/fng/?limit=0&date_format=us`;
-    const match = await caches.match(requestURL);
-    if ("caches" in window) {
-      if (match) {
-        const res = await match.json();
-
-        // Check if cache has expired
-        const now = Date.now();
-        if (now - res.timestamp < CACHE_EXPIRATION) {
-          setDataFng(res.data.reverse());
-          return;
-        }
-      }
-    }
-
-    const res = await axios.get(requestURL);
-
-    const dataToCache = {
-      timestamp: Date.now(),
-      data: res.data.data,
-    };
-
-    const cache = await caches.open("fng");
-    cache.put(requestURL, new Response(JSON.stringify(dataToCache)));
-
-    setDataFng(res.data.data.reverse());
-  }, []);
-
-  useEffect(() => {
-    fetchFNG();
-  }, [fetchFNG]);
+  if (status === "pending" || !dataFng) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>

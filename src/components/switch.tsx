@@ -28,7 +28,7 @@ const Outer = styled.div<{ $checked: boolean }>`
     bottom: 4px;
     background-color: white;
     -webkit-transition: 0.4s;
-    transition: all var(--spring-easing) var(--spring-duration);
+    transition: all ease-out var(--spring-duration);
     border-radius: 4px;
     box-shadow: 0 -1px 1px 1px rgba(0, 0, 0, 0.3),
       0 2px 2px 1px rgba(0, 0, 0, 0.3);
@@ -45,19 +45,20 @@ type Props = {
 
 export default function Switch({ label, checked, onChange }: Props) {
   return (
-    <div
+    <button
       style={{
         display: "flex",
         gap: "8px",
         alignItems: "center",
-        outline: "1px solid #ccc",
         borderRadius: "4px",
         padding: "4px",
         backgroundColor: "#8884d840",
+        color: "#fff",
       }}
+      onMouseDown={onChange}
     >
       <span>{label}</span>
-      <Outer $checked={checked} onClick={onChange} />
-    </div>
+      <Outer $checked={checked} />
+    </button>
   );
 }

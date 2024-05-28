@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
 import styled from "styled-components";
 import ToggleButton from "./ToggleButton";
-import { viewContext } from "../App";
 import { useContext, useMemo } from "react";
 import icon from "./../assets/android-chrome-192x192.png";
+import { viewContext } from "../utils/context";
 
 const Container = styled.div`
   height: 64px;

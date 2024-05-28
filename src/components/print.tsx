@@ -8,7 +8,7 @@ import { getClassification } from "../utils/classification";
 const Container = styled.div`
   width: 100%;
   display: flex;
-  gap: 8px;
+  gap: 10px;
 `;
 
 const SmaStat = styled.div`

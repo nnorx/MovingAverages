@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
 
-import { chartSettingsContext, viewContext } from "../App";
 import nn from "./../assets/nn.ico";
 import swap from "./../assets/swap.svg";
 import Switch from "./switch";
+import { viewContext, chartSettingsContext } from "../utils/context";
 
 const Container = styled.div`
   height: 48px;
@@ -70,7 +70,7 @@ export default function Footer() {
       <Controls>
         <NLink
           $active={animate}
-          onClick={() => {
+          onMouseDown={() => {
             setAnimate(true);
             setDetailView(!detailView);
             setTimeout(() => setAnimate(false), 500);

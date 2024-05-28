@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { smaContext } from "../App";
+import { smaContext } from "../utils/context";
 
 const Button = styled.button<{ $active: boolean }>`
   height: 100%;
@@ -47,7 +47,7 @@ const ToggleButton = React.memo(function ToggleButton({ value }: Props) {
   return (
     <Button
       $active={value === sma}
-      onClick={() => value !== sma && setSma(value)}
+      onMouseDown={() => value !== sma && setSma(value)}
     >
       {value}
     </Button>
