@@ -141,7 +141,7 @@ export default function Chart() {
           yAxisId="left"
           type="monotone"
           stroke="#d9d9d9"
-          strokeWidth="1"
+          opacity={0.25}
           animationDuration={100}
           dot={
             <CustomDot
