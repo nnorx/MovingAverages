@@ -10,24 +10,29 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    concurrency: ci-${{ github.ref }}
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: '22.x'
+          cache: 'yarn'
 
+      - name: Set Yarn version
+        run: corepack prepare yarn@4.9.1 --activate
+  
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-
+        run: yarn install
+  
       - name: Build project
-        run: npm run build
+        run: yarn build
 
       - name: Upload production-ready build files
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: production-files
           path: ./dist
@@ -36,17 +41,17 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: ${{ github.ref == 'refs/heads/main' }}
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: production-files
-          path: ./dist
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+      - name: Deploy to Github Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
