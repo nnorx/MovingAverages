@@ -1,16 +1,16 @@
 export type ChartPoint = {
-  timestamp: string;
-  price: number;
-  ma_value: number;
-  visibleDot: boolean;
+	timestamp: string;
+	price: number;
+	ma_value: number;
+	visibleDot: boolean;
 };
 
 export type JoinedPoint = {
-  timestamp: number;
-  fng: string;
-  price: number;
+	timestamp: number;
+	fng: string;
+	price: number;
 };
 
 export type ChartSettings = {
-  scaleToFit: boolean;
+	scaleToFit: boolean;
 };

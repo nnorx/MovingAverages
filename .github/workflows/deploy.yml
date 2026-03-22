@@ -16,22 +16,26 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: 22
+          cache: pnpm
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Set Yarn version
-        run: corepack prepare yarn@4.9.1 --activate
-  
       - name: Install dependencies
-        run: yarn install
-  
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type Check
+        run: pnpm type-check
+
       - name: Build project
-        run: yarn build
+        run: pnpm build
 
       - name: Upload static files as artifact
         id: deployment

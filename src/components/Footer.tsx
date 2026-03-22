@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 import nn from "./../assets/nn.ico";
 import swap from "./../assets/swap.svg";
+import { chartSettingsContext, viewContext } from "../utils/context";
 import Switch from "./switch";
-import { viewContext, chartSettingsContext } from "../utils/context";
 
 const Container = styled.div`
   height: 48px;
@@ -60,54 +60,54 @@ const NLink = styled.a<{ $active?: boolean }>`
 `;
 
 export default function Footer() {
-  const { detailView, setDetailView } = useContext(viewContext);
-  const [animate, setAnimate] = useState<boolean>(false);
+	const { detailView, setDetailView } = useContext(viewContext);
+	const [animate, setAnimate] = useState<boolean>(false);
 
-  const { chartSettings, setChartSettings } = useContext(chartSettingsContext);
+	const { chartSettings, setChartSettings } = useContext(chartSettingsContext);
 
-  return (
-    <Container>
-      <Controls>
-        <NLink
-          $active={animate}
-          onMouseDown={() => {
-            setAnimate(true);
-            setDetailView(!detailView);
-            setTimeout(() => setAnimate(false), 500);
-          }}
-        >
-          <img
-            src={swap}
-            height="28px"
-            width="28px"
-            alt="swap view"
-            style={{
-              color: "#fff",
-              backgroundColor: "black",
-              borderRadius: "50%",
-              padding: 4,
-            }}
-          ></img>
-        </NLink>
+	return (
+		<Container>
+			<Controls>
+				<NLink
+					$active={animate}
+					onMouseDown={() => {
+						setAnimate(true);
+						setDetailView(!detailView);
+						setTimeout(() => setAnimate(false), 500);
+					}}
+				>
+					<img
+						src={swap}
+						height="28px"
+						width="28px"
+						alt="swap view"
+						style={{
+							color: "#fff",
+							backgroundColor: "black",
+							borderRadius: "50%",
+							padding: 4,
+						}}
+					></img>
+				</NLink>
 
-        <Retractable $retracted={detailView}>
-          <Switch
-            label="Scale to fit"
-            checked={chartSettings.scaleToFit}
-            onChange={() =>
-              setChartSettings({ scaleToFit: !chartSettings.scaleToFit })
-            }
-          />
-        </Retractable>
-      </Controls>
+				<Retractable $retracted={detailView}>
+					<Switch
+						label="Scale to fit"
+						checked={chartSettings.scaleToFit}
+						onChange={() =>
+							setChartSettings({ scaleToFit: !chartSettings.scaleToFit })
+						}
+					/>
+				</Retractable>
+			</Controls>
 
-      <NLink
-        href="https://nicknorcross.com"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img src={nn} height="26px" width="26px" alt="nicknorcross.com"></img>
-      </NLink>
-    </Container>
-  );
+			<NLink
+				href="https://nicknorcross.com"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<img src={nn} height="26px" width="26px" alt="nicknorcross.com"></img>
+			</NLink>
+		</Container>
+	);
 }

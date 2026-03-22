@@ -23,35 +23,35 @@ const Button = styled.button<{ $active: boolean }>`
   &:hover {
     background-color: #8884d8;
     ${({ $active }) =>
-      $active
-        ? "background-color: rgba(90, 125, 124, 0.8);"
-        : "background-color: rgba(43, 45, 66, 0.8);"}
+			$active
+				? "background-color: rgba(90, 125, 124, 0.8);"
+				: "background-color: rgba(43, 45, 66, 0.8);"}
   }
 
   &:active {
     background-color: #8884d840;
     ${({ $active }) =>
-      $active
-        ? "background-color: rgba(90, 125, 124, 0.6);"
-        : "background-color: rgba(43, 45, 66, 0.6);"}
+			$active
+				? "background-color: rgba(90, 125, 124, 0.6);"
+				: "background-color: rgba(43, 45, 66, 0.6);"}
   }
 `;
 
 type Props = {
-  value: number;
+	value: number;
 };
 
 const ToggleButton = React.memo(function ToggleButton({ value }: Props) {
-  const { sma, setSma } = React.useContext(smaContext);
+	const { sma, setSma } = React.useContext(smaContext);
 
-  return (
-    <Button
-      $active={value === sma}
-      onMouseDown={() => value !== sma && setSma(value)}
-    >
-      {value}
-    </Button>
-  );
+	return (
+		<Button
+			$active={value === sma}
+			onMouseDown={() => value !== sma && setSma(value)}
+		>
+			{value}
+		</Button>
+	);
 });
 
 export default ToggleButton;
