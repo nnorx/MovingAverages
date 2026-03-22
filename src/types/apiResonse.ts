@@ -6,5 +6,3 @@ export type FngPoint = {
 	time_until_update?: string;
 	price?: number;
 };
-
-export type PricePoint = [timestamp: number, price: number];
