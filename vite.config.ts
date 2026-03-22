@@ -21,8 +21,8 @@ export default defineConfig({
 				display: "standalone",
 				background_color: "#2B2D42",
 				theme_color: "#8884d8",
-				start_url: "/MovingAverages/",
-				scope: "/MovingAverages/",
+				start_url: "/moving-averages/",
+				scope: "/moving-averages/",
 				icons: [
 					{
 						src: "icons/android-chrome-192x192.png",
@@ -50,5 +50,5 @@ export default defineConfig({
 			},
 		}),
 	],
-	base: "/MovingAverages/",
+	base: "/moving-averages/",
 });
