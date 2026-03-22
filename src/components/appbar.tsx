@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
-import styled from "styled-components";
-import ToggleButton from "./ToggleButton";
 import { useContext, useMemo } from "react";
+import styled from "styled-components";
 import icon from "./../assets/android-chrome-192x192.png";
 import { viewContext } from "../utils/context";
+import ToggleButton from "./ToggleButton";
 
 const Container = styled.div`
   height: 64px;
@@ -39,7 +39,7 @@ const ToggleButtonGroup = styled.div<{ $rotate: boolean }>`
   transition: all var(--spring-duration) var(--spring-easing);
 
   ${({ $rotate }) =>
-    $rotate && "transform: translateY(-200%); user-select: none;"}
+		$rotate && "transform: translateY(-200%); user-select: none;"}
 `;
 
 const Prints = styled.div<{ $rotate: boolean }>`
@@ -71,35 +71,35 @@ const Title = styled.div`
 const VALUES = [7, 14, 30, 90, 180, 365];
 
 export default function Appbar() {
-  const { detailView } = useContext(viewContext);
+	const { detailView } = useContext(viewContext);
 
-  const ToggleButtons = useMemo(() => {
-    return VALUES.map((value) => <ToggleButton key={value} value={value} />);
-  }, []);
+	const ToggleButtons = useMemo(() => {
+		return VALUES.map((value) => <ToggleButton key={value} value={value} />);
+	}, []);
 
-  return (
-    <Container>
-      <div
-        style={{
-          display: "flex",
-          height: "100%",
-          alignItems: "center",
-          gap: "8px",
-        }}
-      >
-        <img src={icon} height="42px" width="42px" />
-        <Title />
-      </div>
+	return (
+		<Container>
+			<div
+				style={{
+					display: "flex",
+					height: "100%",
+					alignItems: "center",
+					gap: "8px",
+				}}
+			>
+				<img src={icon} height="42px" width="42px" alt="Moving Averages" />
+				<Title />
+			</div>
 
-      <Interchangable>
-        <ToggleButtonGroup $rotate={detailView}>
-          {ToggleButtons}
-        </ToggleButtonGroup>
+			<Interchangable>
+				<ToggleButtonGroup $rotate={detailView}>
+					{ToggleButtons}
+				</ToggleButtonGroup>
 
-        <Prints $rotate={detailView}>
-          Prints {dayjs().format("MM/DD/YYYY")}
-        </Prints>
-      </Interchangable>
-    </Container>
-  );
+				<Prints $rotate={detailView}>
+					Prints {dayjs().format("MM/DD/YYYY")}
+				</Prints>
+			</Interchangable>
+		</Container>
+	);
 }
